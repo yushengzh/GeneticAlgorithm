@@ -1,9 +1,4 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import math
-
 import Genetic_Algorithm
 import utils
 from Genetic_Algorithm import Variable, cal_fitness_norm, cross_pool, variation, cal_fitness
@@ -14,10 +9,20 @@ pm = 0.05
 pc = 0.6
 
 if __name__ == '__main__':
+    
+    #parameters
+    a1 = -3.0
+    a2 = 4.1
+    b1 = 12.1
+    b2 = 5.8
+    alpha = 4
+    nums = 10
+    
+    # lowbound, upbound, alpha, nums
+    x1 = Variable(a1, b1, alpha, nums)
+    x2 = Variable(a2, b2, alpha, nums)
 
-    x1 = Variable(-3.0, 12.1, 4, 10)
-    x2 = Variable(4.1, 5.8, 4, 10)
-
+    # generate codes
     code1 = x1.code_generator()
     code2 = x2.code_generator()
     code_len = x1.m + x2.m
@@ -43,12 +48,12 @@ if __name__ == '__main__':
     temp_int_list = [str2list(item) for item in init_group]
     temp_int_list_select = [temp_int_list[item - 1] for item in rw_selected]
 
-    # 交叉生成后代
+    # cross
     o1 = []
     cross_pool(temp_int_list_select, len(temp_int_list_select), len(temp_int_list_select[0]), o1, pc)
     tp1 = [list2str(item) for item in o1]
 
-    # 变异生成后代
+    # variation
     tp1_variation = variation(tp1, pm)
 
     temp_bin = init_group + tp1_variation
@@ -88,12 +93,12 @@ if __name__ == '__main__':
         temp_int_list = [str2list(item) for item in temp_bin]
         temp_int_list_select = [temp_int_list[item - 1] for item in rw_selected]
 
-        # 交叉生成后代
+        # cross
         o1 = []
         cross_pool(temp_int_list_select, len(temp_int_list_select), len(temp_int_list_select[0]), o1, pc)
         tp1 = [list2str(item) for item in o1]
 
-        # 变异生成后代
+        # variation
         tp1_variation = variation(tp1, pm)
 
         temp_bin = temp_bin + tp1_variation
@@ -112,7 +117,7 @@ if __name__ == '__main__':
 
         next_gen_bin.append(temp_bin[fir])
         next_gen_bin.append(temp_bin[sec])
-        rw_selected = x1.roulette_wheel_select(norm_fits, 8)
+        rw_selected = x1.roulette_wheel_select(norm_fits, x1.m - 2)
         for item in rw_selected:
             next_gen_int.append(temp_int[item - 1])
             next_gen_bin.append(temp_bin[item - 1])
